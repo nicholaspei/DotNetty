@@ -658,5 +658,32 @@ namespace DotNetty.Buffers
         {
             return *(float*)(&value);
         }
+
+        public static void Copy(AsciiString src, int srcIdx, IByteBuffer dst, int dstIdx, int length)
+        {
+            Contract.Requires(dst != null);
+
+            if (MathUtil.IsOutOfBounds(srcIdx, length, src.Count))
+            {
+                throw new IndexOutOfRangeException(
+                    $"expected: 0 <= srcIdx({srcIdx}) <= srcIdx + length({length}) <= srcLen({src.Count})");
+            }
+
+            dst.SetBytes(dstIdx, src.Array, srcIdx + src.Offset, length);
+        }
+
+        public static void Copy(AsciiString src, int srcIdx, IByteBuffer dst, int length)
+        {
+            Contract.Requires(dst != null);
+
+            if (MathUtil.IsOutOfBounds(srcIdx, length, src.Count))
+            {
+                throw new IndexOutOfRangeException(
+                    $"expected: 0 <= srcIdx({srcIdx}) <= srcIdx + length({length}) <= srcLen({src.Count})");
+            }
+
+            dst.WriteBytes(src.Array, srcIdx + src.Offset, length);
+        }
+
     }
 }
